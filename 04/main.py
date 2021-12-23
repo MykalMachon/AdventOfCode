@@ -32,6 +32,19 @@ def process_input(filepath):
 
 
 def calculate_winning_board(draw_list, boards):
+    board_list = boards.copy()
+    # yucky O^4 code to update all the boards
+    for number in draw_list:
+        # for each board...
+        for board in board_list:
+            # for each row in each board...
+            for row_idx, row in enumerate(board):
+                # for each item in each row in each board...
+                for col_idx, item in enumerate(row):
+                    if item.value == number:
+                        item.checked = True
+                        # check if this caused a win in column or row
+
     return 0
 
 # returns the score of a given board at any point in the game
@@ -47,7 +60,7 @@ def test_part_one():
     print(f"Num Boards: {len(boards)}")
     winning_board = calculate_winning_board(draw_list, boards)
     winning_score = calculate_board_score(winning_board)
-    print(f"Board # {winning_board} won, with a score of {winning_score}")
+    print(f"Board #{winning_board} won, with a score of {winning_score}")
 
 
 test_part_one()
