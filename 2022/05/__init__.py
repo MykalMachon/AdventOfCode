@@ -49,7 +49,7 @@ def load_steps():
 
 
 def move_cargo(cargo: List[List], steps: List[dict]):
-    """move cargo from one position to another
+    """move cargo from one position to another one by one.
     """
     for step in steps:
         to_move = step.get('num')
@@ -66,7 +66,7 @@ def move_cargo(cargo: List[List], steps: List[dict]):
 
 
 def move_cargo_groups(cargo: List[List], steps: List[dict]):
-    """move cargo from one position to another
+    """move cargo from one position to another while holding the original shape.
     """
     for step in steps:
         to_move = step.get('num')
