@@ -1,60 +1,48 @@
 """
-https://adventofcode.com/2022/day/7
-
-Steps for advent of code day 7:
-1. Load in input as file
-2. Build the file struct step by step based on the input
-3. Traverse over the file struct based and calculate folder size
-4. if a folder has a file size less that is less than 100000, add it to a list
-5. add up all folder sizes and return them
+Advent of code day 6:
+not writing a set of steps for this one because I 
+already got it in my head 😎 
 """
-from typing import List, TypedDict
+from collections import Counter
 
 
-class FileTree(TypedDict):
-    """a file tree dictionary. Is returned recursively"""
-    struct: List
-    total_size: int
-
-
-def load_file() -> List[str]:
-    """Loads the input from the input.txt file"""
-    with open('input.txt', 'r', encoding='utf-8') as file:
-        lines = [line.strip('\n') for line in file.readlines()]
-        return lines
-
-
-def build_file_tree(lines: List[str]) -> FileTree:
-    """build a file tree based on the 
-    list of commands and output in input.txt.
+def load_file():
+    """load file in from input.txt
     """
-    total_size = 0
-    folder_struct = []
-    # 1. on cd command, find folder with filename of cd,
-    #    and set it's children[] to build_file_tree(input[idx:])
-    # 2. on ls command, loop inputs until another cd is found,
-    #    append files and folders to file_tree
-    # 3. on cd .. command, or len(lines) == 0 return the current
-    #    folder's files and folders, and total size
-    return {"struct": folder_struct, "total_size": total_size}
+    with open('./input.txt', 'r') as file:
+        return file.read().replace('\n', '')
 
 
-def process_object(line: str) -> dict:
-    """determine if a file is a folder or a file 
-    and return the appropriate object and metadata as
-    a dictionary
+def string_has_unique_chars(string: str) -> bool:
+    """check if a string has all unique characters
     """
-    return {"line": line}
+    frequency = Counter(string)
+    return len(frequency) == len(string)
 
 
-def find_folders_under_size(file_tree: FileTree, size=100001) -> List:
-    """find all folders where the file_size is less than
-    size. Returns a list of folders.
+def find_packet_start(buffer: str, start_size=4) -> str:
+    """find the start of a packet where the start signifier 
+    is a string in the buffer of size start_size. 
     """
-    return []
+    window = ""
+    for idx, char in enumerate(buffer):
+        # setup the window
+        if len(window) >= start_size:
+            window = window[:start_size-1]
+        window = char + window
+        # if string is a valid size, check for unique
+        if len(window) == start_size:
+            is_unique = string_has_unique_chars(window)
+            if is_unique:
+                return idx + 1
 
 
 if __name__ == "__main__":
-    print("advent of code day 7")
     data = load_file()
-    file_tree = build_file_tree(data)
+    # part 1
+    packet_start = find_packet_start(data)
+    print(f"Packet starts at character {packet_start}")
+
+    # part 2
+    message_start = find_packet_start(data, start_size=14)
+    print(f"Message starts at character {message_start}")
